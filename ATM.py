@@ -114,7 +114,27 @@ class ATM:
             raise Exception('not authenticated')
 
 
+import unittest
+
+class TestATM(unittest.TestCase):
+
+    def setUp(self):
+        self.bank = FakeBank()
+        self.dispenser = FakeMechanicalDispenser()
+        self.atm = ATM(self.bank, self.dispenser)
+
+    def test_withdraw(self):
+        balance1 = self.get_balance()
+        self.atm.widthdraw(1000)
+        balance2 = self.get_balance()
+        self.assertTrue(balance1 - 1000 == balance2)
+
+    def test_deposit(self):
+        balance1 = self.get_balance()
+        self.atm.deposit()
+        balance2 = self.get_balance()
+        self.assertTrue(balance1 + 1000 == balance2)
+
 if __name__ == '__main__':
-    bank = FakeBank()
-    dispenser = FakeMechanicalDispenser()
-    atm = ATM(bank, dispenser)
+    unittest.main()
+
