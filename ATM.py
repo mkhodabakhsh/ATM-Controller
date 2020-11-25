@@ -30,7 +30,7 @@ class FakeBank:
         else:
             raise Exception('secret key is wrong')
 
-    def widthdraw(self, card_number, hash_str, amount):
+    def withdraw(self, card_number, hash_str, amount):
         user_card = self._keys.get(hash_str, None)
         if user_card == card_number:
             if amount > self._balance[user_card]:
@@ -90,15 +90,15 @@ class ATM:
         else:
             raise Exception('not authenticated')
 
-    def widthdraw(self, amount):
+    def withdraw(self, amount):
         if self._is_authenticated:
             try: 
-                self.bank.widthdraw(self._card_number, self._secret_key, amount)
+                self.bank.withdraw(self._card_number, self._secret_key, amount)
             except Exception:
                 raise Exception('balance is not enough')
 
             try:
-                self._mechanical_dispenser.widthdraw(amount)
+                self._mechanical_dispenser.withdraw(amount)
             except Exception:
                 raise Exception("not enough bills in the ATM")
 
@@ -125,7 +125,7 @@ class TestATM(unittest.TestCase):
 
     def test_withdraw(self):
         balance1 = self.get_balance()
-        self.atm.widthdraw(1000)
+        self.atm.withdraw(1000)
         balance2 = self.get_balance()
         self.assertTrue(balance1 - 1000 == balance2)
 
